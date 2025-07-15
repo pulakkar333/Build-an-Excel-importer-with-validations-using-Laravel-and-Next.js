@@ -12,18 +12,12 @@ use Maatwebsite\Excel\Validators\ValidationException;
 
 class ExcelImportController extends Controller
 {
-    /**
-     * Handle the Excel import request.
-     *
-     * @param ImportExcelRequest $request
-     * @return JsonResponse
-     */
+
     public function import(ImportExcelRequest $request): JsonResponse
     {
         $file = $request->file('file');
 
-        // Generate unique filename for failed rows export
-        $failedFileName = 'failed_rows_' . time() . '.xlsx';
+        $failedFileName = 'failed_rows_' . time() . '.xlsx'; // Generate unique filename for failed rows export
 
         try {
             Excel::import(new UserImport, $file);
@@ -35,17 +29,16 @@ class ExcelImportController extends Controller
 
             foreach ($failures as $failure) {
                 $rows[] = [
-                    'row' => $failure->row(),          // Row number
-                    'attribute' => $failure->attribute(),  // Column name
-                    'errors' => $failure->errors(),    // Array of errors
-                    'values' => $failure->values(),    // Row values
+                    'row' => $failure->row(),
+                    'attribute' => $failure->attribute(),
+                    'errors' => $failure->errors(),
+                    'values' => $failure->values(),
                 ];
             }
 
-            // Store failed rows with error messages in an exportable Excel file in storage/app/public
+
             Excel::store(new FailedRowsExport($rows), 'public/' . $failedFileName);
 
-            // Generate download URL - assuming you serve storage from /storage URL
             $downloadUrl = url('storage/' . $failedFileName);
 
             return response()->json([
@@ -56,12 +49,7 @@ class ExcelImportController extends Controller
         }
     }
 
-    /**
-     * Optional: Download the failed rows Excel file by filename.
-     *
-     * @param string $filename
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
-     */
+
     public function downloadFailed(string $filename)
     {
         $path = storage_path('app/public/' . $filename);

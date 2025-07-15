@@ -19,18 +19,13 @@ class FailedRowsExport implements FromCollection, WithHeadings, WithMapping
         $this->failedRows = $failedRows;
     }
 
-    /**
-     * Return a collection of rows to export.
-     */
     public function collection()
     {
         return new Collection($this->failedRows);
     }
 
-    /**
-     * Map each row to the desired format for the export.
-     */
-    public function map($row): array
+    
+    public function map($row): array  //Map each row to the desired format for the export
     {
         return [
             $row['row'] ?? '',
@@ -40,10 +35,8 @@ class FailedRowsExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
-    /**
-     * Define headings for the Excel file.
-     */
-    public function headings(): array
+    
+    public function headings(): array //Define headings for the Excel file
     {
         return [
             'Row Number',

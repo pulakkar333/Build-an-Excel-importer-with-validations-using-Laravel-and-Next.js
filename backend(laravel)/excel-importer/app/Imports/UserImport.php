@@ -15,26 +15,17 @@ class UserImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFail
 {
     use SkipsFailures;
 
-    /**
-     * Convert each row to a User model.
-     *
-     * @param array $row
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
+
     public function model(array $row)
     {
         return new User([
             'name'     => $row['name'],
             'email'    => $row['email'],
-            'password' => Hash::make('default123'), // ✅ Set default password
+            'password' => Hash::make('default123'), 
         ]);
     }
 
-    /**
-     * Validation rules for each row.
-     *
-     * @return array
-     */
+ 
     public function rules(): array
     {
         return [
